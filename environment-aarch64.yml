@@ -1,0 +1,60 @@
+# aarch64 (ARM) variant of environment.yml for NVIDIA DGX Spark / GB10 (Blackwell, sm_121, CUDA 13).
+# environment.yml is an x86-64 export and cannot be solved on linux-aarch64.
+# Usage:
+#   conda env create -f environment-aarch64.yml
+#   conda activate venv_neurostrike
+#
+# Differences to environment.yml:
+#   - torch 2.5.1/cu124 -> 2.10.0/cu130 (oldest aarch64 cu130 torch with a matching torchvision), torchvision to match
+#   - CUDA 12.4 conda libs dropped (bundled in the torch wheels)
+#   - MKL / Intel OpenMP dropped (x86-only; numpy/scipy use OpenBLAS on ARM)
+#   - flash-attn dropped (no aarch64 wheel; code uses attn_implementation='eager')
+#   - decord dropped (no aarch64 wheel; not imported by the repo)
+#   - sympy bumped to satisfy torch 2.10
+#   - Qt, ffmpeg, mysql, aws-* and other export-only system libs dropped
+# All other libraries are pinned to the versions of environment.yml.
+name: venv_neurostrike
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu130
+      # PyTorch (CUDA 13, aarch64)
+      - torch==2.10.0+cu130
+      - torchvision==0.25.0+cu130
+      - sympy>=1.13.3
+      # Hugging Face stack
+      - transformers==4.51.3
+      - trl==0.17.0
+      - peft==0.15.0
+      - accelerate==1.5.2
+      - datasets==3.3.2
+      - tokenizers==0.21.0
+      - safetensors==0.5.3
+      - huggingface_hub==0.30.2
+      - einops==0.8.1
+      # Scientific stack
+      - numpy==1.26.4
+      - scipy==1.15.2
+      - scikit-learn==1.6.1
+      - pandas==2.2.3
+      - pyarrow==19.0.0
+      - matplotlib==3.10.1
+      # Vision-language models
+      - qwen-vl-utils==0.0.8
+      - av==14.2.0
+      - pillow==11.1.0
+      # Black-box API access
+      - google-genai==1.25.0
+      - google-generativeai==0.8.5
+      - tenacity==8.5.0
+      - backoff==2.2.1
+      - httpx==0.28.1
+      # Utilities
+      - gputil==1.4.0
+      - tensorboard==2.19.0
+      - tqdm==4.67.1
+      - regex==2024.11.6
+      - pyyaml==6.0.2

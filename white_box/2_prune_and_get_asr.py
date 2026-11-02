@@ -37,7 +37,7 @@ def register_pruning_hooks(model, candidate_dict, target_layer):
 
 if __name__ == "__main__":        
     # Select the model that you want to test
-    model_id = 0
+    model_id = 2
     
     # Config for safety neuron extraction
     safe_neuron_threshold = 3
